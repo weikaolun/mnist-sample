@@ -1,3 +1,5 @@
+-e git://github.com/Paperspace/gradient-utils.git@fa44b4a27428399474281b0d007109b63ddb1846#egg=gradient-utils
+
 numpy>=1.15.4
 pandas>=0.22.0
 scipy>=0.19.1
