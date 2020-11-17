@@ -22,14 +22,8 @@ import os
 from absl import app as absl_app
 from absl import flags
 import tensorflow as tf  # pylint: disable=g-bad-import-order
-from gradient_utils.metrics import MetricsLogger
-
-gradient_sdk = True
-try:
-    from gradient_sdk import get_tf_config
-except ImportError:
-    print("Gradient SDK not installed. Distributed training is not possible")
-    gradient_sdk = False
+from gradient_utils.metrics import add_metrics
+from gradient_utils import get_tf_config
 
 import dataset
 from utils.flags import core as flags_core
@@ -206,15 +200,13 @@ def run_mnist(flags_obj):
             'data_format': data_format,
         })
 
-    logger = MetricsLogger()
-    logger.add_counter('training')
-    logger.add_counter('evaluation')
-    
+    training = 0
+    evaluation = 0
+
     # Set up training and evaluation input functions.
     def train_input_fn():
         """Prepare data for training."""
-        logger['training'].inc()
-        logger.push_metrics()
+        add_metrics({'training': training})
 
         # When choosing shuffle buffer sizes, larger sizes result in better
         # randomness, while smaller sizes use less memory. MNIST is a small
@@ -228,8 +220,7 @@ def run_mnist(flags_obj):
         return ds
 
     def eval_input_fn():
-        logger['training'].inc()
-        logger.push_metrics()
+        add_metrics({'evaluation': evaluation})
         return dataset.test(flags_obj.data_dir).batch(
             flags_obj.batch_size).make_one_shot_iterator().get_next()
 
@@ -269,11 +260,10 @@ if __name__ == '__main__':
 
     tf.logging.set_verbosity(tf.logging.DEBUG)
 
-    if gradient_sdk:
-        try:
-            get_tf_config()
-        except:
-            pass
+    try:
+        get_tf_config()
+    except:
+        pass
     define_mnist_flags()
     # Print ENV Variables
     tf.logging.debug('=' * 20 + ' Environment Variables ' + '=' * 20)
