@@ -22,7 +22,7 @@ import os
 from absl import app as absl_app
 from absl import flags
 import tensorflow as tf  # pylint: disable=g-bad-import-order
-from gradient_utils.metrics import add_metrics
+from gradient_utils import metrics
 from gradient_utils import get_tf_config
 
 import dataset
@@ -206,7 +206,7 @@ def run_mnist(flags_obj):
     # Set up training and evaluation input functions.
     def train_input_fn():
         """Prepare data for training."""
-        add_metrics({'training': training})
+        metrics.add_metrics({'training': training})
 
         # When choosing shuffle buffer sizes, larger sizes result in better
         # randomness, while smaller sizes use less memory. MNIST is a small
@@ -220,7 +220,7 @@ def run_mnist(flags_obj):
         return ds
 
     def eval_input_fn():
-        add_metrics({'evaluation': evaluation})
+        metrics.add_metrics({'evaluation': evaluation})
         return dataset.test(flags_obj.data_dir).batch(
             flags_obj.batch_size).make_one_shot_iterator().get_next()
 
@@ -257,6 +257,7 @@ def main(_):
 
 
 if __name__ == '__main__':
+    metrics.init(sync_tensorboard=True)
 
     tf.logging.set_verbosity(tf.logging.DEBUG)
 
