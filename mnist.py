@@ -258,8 +258,8 @@ def main(_):
 
 if __name__ == '__main__':
     metrics.init(sync_tensorboard=True)
-    print("patched")
-    print(metrics.patched)
+    tf.logging.debug("patched")
+    tf.logging.debug(metrics.patched)
 
     tf.logging.set_verbosity(tf.logging.DEBUG)
 
