@@ -6,7 +6,7 @@ workflows:
       - name: "mnist"
         command: experiment.run_single_node
         params:
-          command: apt update && apt-get install git && pip install -r requirements.txt && python mnist.py
+          command: apt update && apt-get install -y git && pip install -r requirements.txt && python mnist.py
           container: tensorflow/tensorflow:1.15.4-gpu-py3
           clusterId: cl9ez0c8g
           machineType: P4000
