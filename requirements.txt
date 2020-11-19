@@ -5,7 +5,7 @@ typing
 gradient-sdk
 Pillow>=6.0.0
 requests>=2.22.0
-# tensorflow==1.13.1 # add Tensorflow if its not present in dockerfile
+tensorflow==1.15 # add Tensorflow if its not present in dockerfile
 pyspark
 # gradient-utils>=0.2.0
 git+git://github.com/Paperspace/gradient-utils.git@colin/cr2-82-create-new-init-function-in-metrics#egg=gradient-utils

@@ -112,6 +112,7 @@ def model_fn(features, labels, mode, params):
     image = features
     if isinstance(image, dict):
         image = features['image']
+    tf.summary.FileWriter('./logs')
 
     if mode == tf.estimator.ModeKeys.PREDICT:
         logits = model(image, training=False)
