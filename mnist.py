@@ -112,7 +112,7 @@ def model_fn(features, labels, mode, params):
     image = features
     if isinstance(image, dict):
         image = features['image']
-    tf.summary.FileWriter('./logs')
+    tf.summary.FileWriter('./tblogs')
 
     if mode == tf.estimator.ModeKeys.PREDICT:
         logits = model(image, training=False)
@@ -251,6 +251,13 @@ def run_mnist(flags_obj):
         mnist_classifier.export_savedmodel(flags_obj.export_dir, input_fn,
                                            strip_default_attrs=True)
         tf.logging.debug('Model Exported')
+
+    f = []
+    for (_, _, filenames) in os.walk('./tblogs'):
+        f.extend(filenames)
+        break
+    tf.logging.debug('tblogs')
+    tf.logging.debug(f)
 
 
 def main(_):
